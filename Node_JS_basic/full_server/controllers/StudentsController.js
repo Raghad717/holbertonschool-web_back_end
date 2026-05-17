@@ -2,21 +2,22 @@ import readDatabase from '../utils';
 
 class StudentsController {
   static getAllStudents(req, res) {
-    const database = process.argv[2];
+    const filePath = process.argv[2];
 
-    readDatabase(database)
+    readDatabase(filePath)
       .then((fields) => {
-        let response = 'This is the list of our students';
+        const lines = ['This is the list of our students'];
 
-        const sortedFields = Object.keys(fields).sort((a, b) => (
-          a.toLowerCase().localeCompare(b.toLowerCase())
-        ));
+        const sortedFields = Object.keys(fields)
+          .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
-        sortedFields.forEach((field) => {
-          response += `\nNumber of students in ${field}: ${fields[field].length}. List: ${fields[field].join(', ')}`;
-        });
+        for (const field of sortedFields) {
+          const list = fields[field].join(', ');
+          const count = fields[field].length;
+          lines.push(`Number of students in ${field}: ${count}. List: ${list}`);
+        }
 
-        res.status(200).send(response);
+        res.status(200).send(lines.join('\n'));
       })
       .catch(() => {
         res.status(500).send('Cannot load the database');
@@ -31,11 +32,12 @@ class StudentsController {
       return;
     }
 
-    const database = process.argv[2];
+    const filePath = process.argv[2];
 
-    readDatabase(database)
+    readDatabase(filePath)
       .then((fields) => {
-        res.status(200).send(`List: ${fields[major].join(', ')}`);
+        const students = fields[major] || [];
+        res.status(200).send(`List: ${students.join(', ')}`);
       })
       .catch(() => {
         res.status(500).send('Cannot load the database');
