@@ -1,3 +1,4 @@
+// 2-read_file.js
 const fs = require('fs');
 
 function countStudents(path) {
@@ -5,11 +6,11 @@ function countStudents(path) {
     // Read the file synchronously
     const data = fs.readFileSync(path, 'utf8');
     
-    // Split the data into lines and filter out empty lines
-    const lines = data.split('\n').filter(line => line.trim() !== '');
+    // Split the data into lines
+    const lines = data.split('\n');
     
-    // Remove the header line
-    const students = lines.slice(1);
+    // Filter out empty lines and get rid of the header
+    const students = lines.filter(line => line.trim() !== '').slice(1);
     
     // Log total number of students
     console.log(`Number of students: ${students.length}`);
