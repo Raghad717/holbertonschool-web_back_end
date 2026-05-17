@@ -1,24 +1,17 @@
-// 2-read_file.js
 const fs = require('fs');
 
 function countStudents(path) {
   try {
-    // Read the file synchronously
     const data = fs.readFileSync(path, 'utf8');
     
-    // Split the data into lines
     const lines = data.split('\n');
     
-    // Filter out empty lines and get rid of the header
     const students = lines.filter(line => line.trim() !== '').slice(1);
     
-    // Log total number of students
     console.log(`Number of students: ${students.length}`);
     
-    // Create an object to store students by field
     const fields = {};
     
-    // Process each student
     for (const student of students) {
       const [firstname, lastname, age, field] = student.split(',');
       
@@ -28,12 +21,10 @@ function countStudents(path) {
       fields[field].push(firstname);
     }
     
-    // Log the number of students in each field
     for (const [field, names] of Object.entries(fields)) {
       console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
     }
   } catch (error) {
-    // If file cannot be read, throw an error
     throw new Error('Cannot load the database');
   }
 }
